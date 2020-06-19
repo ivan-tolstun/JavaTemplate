@@ -1,0 +1,47 @@
+plugins {
+	id 'org.springframework.boot' version '2.3.1.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+	id "com.palantir.docker" version "0.25.0"
+	id "com.palantir.docker-run" version "0.25.0"
+}
+
+group = 'com.tolstun'
+version = '0.1.0'
+sourceCompatibility = 14
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compile 'org.javatuples:javatuples:1.2'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+}
+
+test {
+	useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile) {
+	options.compilerArgs += '--enable-preview'
+}
+tasks.withType(Test) {
+	jvmArgs += "--enable-preview"
+}
+
+docker {
+	name "${project.name.toLowerCase()}:${project.version}"
+	copySpec.from("build").into("build")
+	pull(true)
+	setDockerfile(file("Dockerfile"))
+}
