@@ -5,7 +5,6 @@ import com.tolstun.behavior.NumeralBehavior;
 
 public class Numeral {
 
-
     public record ArabicNumeral(Integer number) {
 
         public RomanNumeral toRomanNumeral() {

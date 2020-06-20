@@ -11,26 +11,6 @@ import java.util.stream.Stream;
 public class NumeralBehavior {
 
 
-    static public final ArabicToRomanFunction arabicToRomanProcess = (final ArabicNumeral arabicNumeral) -> {
-
-        Integer changeableNumber = arabicNumeral.number();
-        var romanNumeral = new StringBuilder();
-
-        var romanTemplateNumerals = Stream
-                .of(RomanNumeralType.values())
-                .sorted(Comparator.comparing(RomanNumeralType::getValue).reversed())
-                .collect(Collectors.toList());
-
-        for (var romanTemplate : romanTemplateNumerals) {
-            while (romanTemplate.getValue() <= changeableNumber) {
-                romanNumeral.append(romanTemplate.name());
-                changeableNumber -= romanTemplate.getValue();
-            }
-        }
-        return new RomanNumeral(romanNumeral.toString());
-    };
-
-
     static public final RomanToArabicFunction romanToArabicProcess = (final RomanNumeral romanNumeral) -> {
 
         var arabicNumber = romanNumeral.numeral()
@@ -49,6 +29,27 @@ public class NumeralBehavior {
                 .sum();
 
         return new ArabicNumeral(arabicNumber);
+    };
+
+
+    static public final ArabicToRomanFunction arabicToRomanProcess = (final ArabicNumeral arabicNumeral) -> {
+
+        Integer changeableNumber = arabicNumeral.number();
+        var romanNumeral = new StringBuilder();
+
+        var romanTemplateNumerals = Stream
+                .of(RomanNumeralType.values())
+                .sorted(Comparator.comparing(RomanNumeralType::getValue).reversed())
+                .collect(Collectors.toList());
+
+        for (var romanTemplate : romanTemplateNumerals) {
+            while (romanTemplate.getValue() <= changeableNumber) {
+                romanNumeral.append(romanTemplate.name());
+                changeableNumber -= romanTemplate.getValue();
+            }
+        }
+
+        return new RomanNumeral(romanNumeral.toString());
     };
 
 
